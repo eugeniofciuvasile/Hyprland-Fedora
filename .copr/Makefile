@@ -1,4 +1,5 @@
 srpm:
-	dnf install -y rpm-build curl grep rpm-devtools
+	dnf install -y rpmdevtools || dnf install -y rpm-build
+	chmod +x create-srpm.sh
 	./create-srpm.sh
 	cp srpm/*.src.rpm $(outdir)

@@ -24,6 +24,11 @@ download() {
 
 mkdir -p sources srpm
 
+# Determine Fedora version for dist suffix
+FEDORA_VER=$(rpm -E %fedora)
+[ "$FEDORA_VER" = "%fedora" ] && FEDORA_VER="43"
+DIST_VAL=".fc$FEDORA_VER"
+
 # Process Hyprland SPEC
 SPEC_HYPR="hyprland.spec"
 if [ -f "$SPEC_HYPR" ]; then
@@ -54,7 +59,10 @@ if [ -f "$SPEC_HYPR" ]; then
     # Note: Using the known working patched version of udis86 for Hyprland
     download "udis86-hyprland.tar.gz" "https://github.com/AshBuk/Hyprland-Fedora/releases/download/${B_ASSET}/udis86-hyprland.tar.gz"
 
-    rpmbuild -bs "$SPEC_HYPR" --define "_sourcedir $SCRIPT_DIR/sources" --define "_srcrpmdir $SCRIPT_DIR/srpm" --define "dist .fc$(rpm -E %fedora)"
+    rpmbuild -bs "$SPEC_HYPR" \
+             --define "_sourcedir $SCRIPT_DIR/sources" \
+             --define "_srcrpmdir $SCRIPT_DIR/srpm" \
+             --define "dist $DIST_VAL"
 fi
 
 # Process Portal SPEC
@@ -64,7 +72,10 @@ if [ -f "$SPEC_PORTAL" ]; then
     V_PORTAL=$(parse_spec_global "$SPEC_PORTAL" "portal_version")
     download "xdg-desktop-portal-hyprland-${V_PORTAL}.tar.gz" "https://github.com/hyprwm/xdg-desktop-portal-hyprland/archive/refs/tags/v${V_PORTAL}.tar.gz"
     
-    rpmbuild -bs "$SPEC_PORTAL" --define "_sourcedir $SCRIPT_DIR/sources" --define "_srcrpmdir $SCRIPT_DIR/srpm" --define "dist .fc$(rpm -E %fedora)"
+    rpmbuild -bs "$SPEC_PORTAL" \
+             --define "_sourcedir $SCRIPT_DIR/sources" \
+             --define "_srcrpmdir $SCRIPT_DIR/srpm" \
+             --define "dist $DIST_VAL"
 fi
 
 echo "=== SRPMs created successfully! ==="
