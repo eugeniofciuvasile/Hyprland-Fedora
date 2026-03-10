@@ -5,6 +5,8 @@
 # Version definitions (single source of truth)
 # =============================================================================
 %global portal_version          1.3.11
+%global portal_commit           5179fb3
+%global portal_date             2026-03-10
 %global hyprland_min_ver        0.54.0
 %global hyprwayland_scanner_ver 0.4.5
 %global hyprutils_ver           0.11.0
@@ -107,7 +109,9 @@ cmake -B build \
   -DCMAKE_PREFIX_PATH="$VENDOR_PREFIX" \
   -DCMAKE_CXX_FLAGS="$GCC15_CXXFLAGS" \
   -DCMAKE_INSTALL_RPATH="$VENDOR_RPATH" \
-  -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON
+  -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON \
+  -DVERSION="%{portal_version}" \
+  -DGIT_COMMIT_HASH="%{portal_commit}"
 cmake --build build --parallel %{_smp_build_ncpus}
 
 %install

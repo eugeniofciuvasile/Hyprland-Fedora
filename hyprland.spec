@@ -5,6 +5,9 @@
 # Version definitions (single source of truth)
 # =============================================================================
 %global hyprland_version        0.54.2
+%global hyprland_commit         59f9f26
+%global hyprland_branch         main
+%global hyprland_date           2026-03-10
 %global hyprland_protocols_ver  0.7.0
 %global hyprwayland_scanner_ver 0.4.5
 %global hyprutils_ver           0.11.0
@@ -249,7 +252,12 @@ cmake -B build \
   -DCMAKE_CXX_FLAGS="$GCC15_CXXFLAGS -I$VENDOR_PREFIX/include" \
   -DBUILD_TESTING=OFF \
   -DCMAKE_INSTALL_RPATH="$VENDOR_RPATH" \
-  -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON
+  -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON \
+  -DHYPRLAND_VERSION="%{hyprland_version}" \
+  -DGIT_BRANCH="%{hyprland_branch}" \
+  -DGIT_COMMIT_HASH="%{hyprland_commit}" \
+  -DGIT_COMMIT_DATE="%{hyprland_date}" \
+  -DGIT_DIRTY=0
 cmake --build build --parallel %{_smp_build_ncpus}
 
 %install
