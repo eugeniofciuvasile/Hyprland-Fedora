@@ -59,17 +59,18 @@ process_spec() {
         download "glaze-${V_GLAZ}.tar.gz" "https://github.com/stephenberry/glaze/archive/refs/tags/v${V_GLAZ}.tar.gz"
         download "udis86-hyprland.tar.gz" "https://github.com/AshBuk/Hyprland-Fedora/releases/download/${B_ASSET}/udis86-hyprland.tar.gz"
 
-        # NEW: Fetch commit information for the version
+        # NEW: Fetch commit info with User-Agent and Error Handling
         echo "Fetching commit info for v${V_HYPR}..."
-        COMMIT_INFO=$(curl -s "https://api.github.com/repos/hyprwm/Hyprland/commits/v${V_HYPR}")
-        HASH=$(echo "$COMMIT_INFO" | grep -m1 '"sha":' | cut -d'"' -f4)
-        DATE=$(echo "$COMMIT_INFO" | grep -m1 '"date":' | cut -d'"' -f4)
-        MESSAGE=$(echo "$COMMIT_INFO" | grep -m1 '"message":' | cut -d'"' -f4 | head -n1)
+        COMMIT_INFO=$(curl -s -H "User-Agent: Fedora-Copr-Builder" "https://api.github.com/repos/hyprwm/Hyprland/commits/v${V_HYPR}") || true
         
-        echo "HASH: $HASH"
-        echo "DATE: $DATE"
+        HASH=$(echo "$COMMIT_INFO" | grep '"sha":' | head -n1 | cut -d'"' -f4 || echo "unknown")
+        DATE=$(echo "$COMMIT_INFO" | grep '"date":' | head -n1 | cut -d'"' -f4 || echo "unknown")
+        MESSAGE=$(echo "$COMMIT_INFO" | grep '"message":' | head -n1 | cut -d'"' -f4 | head -n1 || echo "unknown")
+        
+        [ -z "$HASH" ] && HASH="unknown"
+        [ -z "$DATE" ] && DATE="unknown"
 
-        # Create a metadata file to include in the SRPM
+        echo "HASH: $HASH"
         echo "HASH=$HASH" > sources/metadata.env
         echo "DATE=$DATE" >> sources/metadata.env
         echo "BRANCH=tags/v$V_HYPR" >> sources/metadata.env
