@@ -1,0 +1,35 @@
+# Copyright (c) 2026 Eugen Iofciu Vasile
+# SPDX-License-Identifier: MIT
+#
+# Run rpmlint on spec files
+
+name: RPM Lint
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths: [ '*.spec' ]
+  push:
+    branches: [ main ]
+    paths: [ '*.spec' ]
+  workflow_dispatch:
+
+jobs:
+  rpmlint:
+    name: rpmlint
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install rpmlint
+        run: dnf install -y rpmlint
+
+      - name: Run rpmlint
+        run: |
+          echo "=== Running rpmlint on spec files ==="
+          rpmlint *.spec
+          echo "=== All spec files passed rpmlint ==="

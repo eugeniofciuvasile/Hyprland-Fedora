@@ -1,0 +1,7 @@
+# SRPM build artifacts
+sources/
+srpm/
+*.src.rpm
+vendor/
+build/
+.cache/
