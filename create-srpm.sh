@@ -58,6 +58,22 @@ process_spec() {
         download "hyprwire-${V_WIRE}.tar.gz" "https://github.com/hyprwm/hyprwire/archive/refs/tags/v${V_WIRE}.tar.gz"
         download "glaze-${V_GLAZ}.tar.gz" "https://github.com/stephenberry/glaze/archive/refs/tags/v${V_GLAZ}.tar.gz"
         download "udis86-hyprland.tar.gz" "https://github.com/AshBuk/Hyprland-Fedora/releases/download/${B_ASSET}/udis86-hyprland.tar.gz"
+
+        # NEW: Fetch commit information for the version
+        echo "Fetching commit info for v${V_HYPR}..."
+        COMMIT_INFO=$(curl -s "https://api.github.com/repos/hyprwm/Hyprland/commits/v${V_HYPR}")
+        HASH=$(echo "$COMMIT_INFO" | grep -m1 '"sha":' | cut -d'"' -f4)
+        DATE=$(echo "$COMMIT_INFO" | grep -m1 '"date":' | cut -d'"' -f4)
+        MESSAGE=$(echo "$COMMIT_INFO" | grep -m1 '"message":' | cut -d'"' -f4 | head -n1)
+        
+        echo "HASH: $HASH"
+        echo "DATE: $DATE"
+
+        # Create a metadata file to include in the SRPM
+        echo "HASH=$HASH" > sources/metadata.env
+        echo "DATE=$DATE" >> sources/metadata.env
+        echo "BRANCH=tags/v$V_HYPR" >> sources/metadata.env
+        echo "MESSAGE=$MESSAGE" >> sources/metadata.env
     
     elif [[ "$spec" == "xdg-desktop-portal-hyprland.spec" ]]; then
         V_PORTAL=$(parse_spec_global "$spec" "portal_version")
@@ -82,7 +98,6 @@ process_spec() {
 if [ -n "$TARGET_SPEC" ]; then
     process_spec "$TARGET_SPEC"
 else
-    # Fallback: build all if no target specified
     for s in *.spec; do
         process_spec "$s"
     done
