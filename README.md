@@ -23,7 +23,7 @@ This project provides RPM specification files and build scripts to package Hyprl
    ```
 3. **Build RPM (using Mock):**
    ```bash
-   mock -r fedora-41-x86_64 --rebuild srpm/*.src.rpm
+   mock -r fedora-43-x86_64 --rebuild srpm/*.src.rpm
    ```
 
 ### COPR Setup (Automated Build)
