@@ -274,6 +274,7 @@ cp -a "$VENDOR_PREFIX"/lib/lib*.so*   "$VENDOR_DST/lib/"   2>/dev/null || true
 %dir %{_libexecdir}/%{name}
 %{_libexecdir}/%{name}/vendor/
 %{_datadir}/wayland-sessions/hyprland.desktop
+%{_datadir}/wayland-sessions/hyprland-uwsm.desktop
 %{_datadir}/hypr/
 %{_datadir}/xdg-desktop-portal/hyprland-portals.conf
 %{_includedir}/hyprland/
