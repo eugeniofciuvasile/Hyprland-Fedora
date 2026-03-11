@@ -103,6 +103,10 @@ popd
 
 # 5) xdg-desktop-portal-hyprland
 VENDOR_RPATH='%{_libexecdir}/hyprland/vendor/lib64:%{_libexecdir}/hyprland/vendor/lib'
+
+export VERSION="%{portal_version}"
+export GIT_COMMIT_HASH="%{portal_commit}"
+
 cmake -B build \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_INSTALL_PREFIX=%{_prefix} \
@@ -110,8 +114,7 @@ cmake -B build \
   -DCMAKE_CXX_FLAGS="$GCC15_CXXFLAGS" \
   -DCMAKE_INSTALL_RPATH="$VENDOR_RPATH" \
   -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON \
-  -DVERSION="%{portal_version}" \
-  -DGIT_COMMIT_HASH="%{portal_commit}"
+  -DVERSION="%{portal_version}"
 cmake --build build --parallel %{_smp_build_ncpus}
 
 %install

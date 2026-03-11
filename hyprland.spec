@@ -245,6 +245,15 @@ popd
 
 # 10) Hyprland
 VENDOR_RPATH='$ORIGIN/../libexec/hyprland/vendor/lib64:$ORIGIN/../libexec/hyprland/vendor/lib'
+
+export GIT_BRANCH="%{hyprland_branch}"
+export GIT_COMMIT_HASH="%{hyprland_commit}"
+export GIT_COMMIT_DATE="%{hyprland_date}"
+export GIT_COMMIT_MESSAGE="Release v%{hyprland_version}"
+export GIT_DIRTY="clean"
+export GIT_TAG="v%{hyprland_version}"
+export GIT_COMMITS="0"
+
 cmake -B build \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_INSTALL_PREFIX=%{_prefix} \
@@ -254,9 +263,6 @@ cmake -B build \
   -DCMAKE_INSTALL_RPATH="$VENDOR_RPATH" \
   -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON \
   -DHYPRLAND_VERSION="%{hyprland_version}" \
-  -DGIT_BRANCH="%{hyprland_branch}" \
-  -DGIT_COMMIT_HASH="%{hyprland_commit}" \
-  -DGIT_COMMIT_DATE="%{hyprland_date}" \
   -DGIT_DIRTY=0
 cmake --build build --parallel %{_smp_build_ncpus}
 
