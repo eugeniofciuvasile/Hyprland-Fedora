@@ -1,4 +1,5 @@
 # Hyprland for Fedora
+[![Copr build status](https://copr.fedorainfracloud.org/coprs/mreuz/Hyprland-Fedora/package/hyprland/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/mreuz/Hyprland-Fedora/package/hyprland/)
 
 **The latest stable Hyprland releases for Fedora, built using modern, isolated packaging.**
 
